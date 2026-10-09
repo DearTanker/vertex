@@ -1,0 +1,13 @@
+# 减小 Dokploy 构建上下文 (本文件用于 docker/Dockerfile.test 的构建)
+.git
+webui/node_modules
+webui/public/assets/styles
+node_modules
+app/static
+app/data
+app/db
+app/config
+logs
+torrents
+develop
+docs

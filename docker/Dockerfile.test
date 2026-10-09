@@ -1,0 +1,12 @@
+# 仅用于在 Dokploy 上测试某个未合并的修复:
+# 基于官方镜像覆盖被改动的后端文件, 避免走官方 Dockerfile 里 git clone 官方分支的逻辑。
+#
+# 构建上下文 = 本目录的上级 (仓库根目录)
+# 用法: docker build -f docker/Dockerfile.test -t vertex:test .
+FROM lswl/vertex:stable
+
+# 覆盖被修改的文件 (按需增删)
+COPY app/libs/site/Audiences.js /app/vertex/app/libs/site/Audiences.js
+COPY app/common/Site.js /app/vertex/app/common/Site.js
+
+CMD ["bash", "/app/vertex/docker/start.sh"]
