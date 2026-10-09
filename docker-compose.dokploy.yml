@@ -5,8 +5,11 @@
 #
 # 与生产实例隔离的关键点:
 #   - 端口用 3003 (生产是 3002)
-#   - 数据卷用 /root/vertex-test (生产是 /root/vertex)
-#   - 容器名/项目名由 Dokploy 用服务名决定, 这里显式加前缀避免冲突
+#   - 数据卷用 ../files/vertex-test (Dokploy 官方推荐的持久化目录, 不会随部署被清空)
+#   - 服务名不同, 容器名显式前置 vertex-test 避免冲突
+#
+# 如果想完全复用生产的 /root/vertex 数据 (只测代码不重配站点), 把 volumes 换成:
+#   - /root/vertex:/vertex
 services:
   vertex-test:
     build:
@@ -14,11 +17,12 @@ services:
       dockerfile: docker/Dockerfile.test
     image: vertex:test
     container_name: vertex-test
+    # 每次部署都重新 build, 否则会复用旧的 vertex:test 镜像
     pull_policy: build
     environment:
       TZ: Asia/Shanghai
     volumes:
-      - /root/vertex-test:/vertex
+      - ../files/vertex-test:/vertex
     ports:
       - "3003:3000"
     networks:
